@@ -42,6 +42,8 @@ learn-terraform-from-scratch/
 ├── versions.tf          # Terraform CLI & provider version constraints
 ├── providers.tf         # AWS provider config (region, default_tags)
 ├── main.tf              # VPC resource
+├── variables.tf         # inputs: region, environment, VPC CIDR
+├── outputs.tf           # outputs: VPC ID, CIDR block
 └── .terraform.lock.hcl  # pinned provider versions & checksums (committed)
 ```
 
@@ -60,7 +62,14 @@ learn-terraform-from-scratch/
 terraform init      # download the AWS provider
 terraform validate  # check syntax
 terraform plan      # preview changes
+terraform apply     # create the VPC
+terraform output    # show VPC ID and CIDR
+terraform destroy   # clean up when done
 ```
+
+Override defaults with `-var`, e.g. `terraform plan -var="environment=prod" -var="vpc_cidr=10.1.0.0/16"`.
+
+> State is stored locally (`terraform.tfstate`, git-ignored) until Stage 4 moves it to S3.
 
 ---
 

@@ -3,7 +3,7 @@
 ## Phase 1 — Foundations
 > Get a single VPC running, then turn it into something reusable
 
-- [ ] Stage 1 — Initial VPC setup (provider with `default_tags`, variables, outputs, DNS settings) — *in progress: versions, provider, VPC resource done*
+- [x] Stage 1 — Initial VPC setup (provider with `default_tags`, variables, outputs, DNS settings)
 - [ ] Stage 2 — Move VPC resource into a reusable module
 - [ ] Stage 3 — Multi-environment folder structure
 - [ ] Stage 4 — Remote state with S3 backend (native locking via `use_lockfile`, no DynamoDB table)
