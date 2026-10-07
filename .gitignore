@@ -1,0 +1,38 @@
+# --- Terraform ---
+
+# Provider plugins & downloaded modules (recreated by `terraform init`)
+.terraform/
+
+# State files — may contain secrets, live in the S3 backend
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Plan files from `terraform plan -out=...` — may contain secrets
+*.tfplan
+tfplan
+
+# Variable values — may contain secrets or account-specific data
+*.tfvars
+*.tfvars.json
+
+# Override files — meant for local-only tweaks
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Crash logs
+crash.log
+crash.*.log
+
+# CLI config (may contain HCP Terraform tokens)
+.terraformrc
+terraform.rc
+
+# NOTE: .terraform.lock.hcl is intentionally NOT ignored — commit it
+# so every machine and CI uses the same provider versions.
+
+# --- OS / editor ---
+Thumbs.db
+.DS_Store
