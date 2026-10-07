@@ -35,13 +35,32 @@ Documents a step-by-step path through Terraform on AWS — starting with a singl
 
 ## Folder Structure
 
-not available yet.
+Flat root module for now — it becomes a reusable module in Stage 2 and a multi-environment layout in Stage 3.
+
+```
+learn-terraform-from-scratch/
+├── versions.tf          # Terraform CLI & provider version constraints
+├── providers.tf         # AWS provider config (region, default_tags)
+├── main.tf              # VPC resource
+└── .terraform.lock.hcl  # pinned provider versions & checksums (committed)
+```
 
 ---
 
 ## Installation
 
-not available yet.
+**Prerequisites**
+
+- Terraform `~> 1.16.0` (64-bit build — `terraform version` should show `windows_amd64` / `linux_amd64`)
+- AWS CLI configured with credentials (`aws sts get-caller-identity` should succeed)
+
+**Run**
+
+```bash
+terraform init      # download the AWS provider
+terraform validate  # check syntax
+terraform plan      # preview changes
+```
 
 ---
 
