@@ -35,15 +35,20 @@ Documents a step-by-step path through Terraform on AWS — starting with a singl
 
 ## Folder Structure
 
-Flat root module for now — it becomes a reusable module in Stage 2 and a multi-environment layout in Stage 3.
+The VPC lives in a reusable module (Stage 2); the root module only calls it. The multi-environment layout comes in Stage 3.
 
 ```
 learn-terraform-from-scratch/
 ├── versions.tf          # Terraform CLI & provider version constraints
 ├── providers.tf         # AWS provider config (region, default_tags)
-├── main.tf              # VPC resource
+├── main.tf              # calls module "vpc"
 ├── variables.tf         # inputs: region, environment, VPC CIDR
-├── outputs.tf           # outputs: VPC ID, CIDR block
+├── outputs.tf           # outputs re-exported from the module
+├── modules/
+│   └── vpc/
+│       ├── main.tf      # aws_vpc resource
+│       ├── variables.tf # module inputs (no defaults)
+│       └── outputs.tf   # vpc_id, vpc_cidr_block
 └── .terraform.lock.hcl  # pinned provider versions & checksums (committed)
 ```
 

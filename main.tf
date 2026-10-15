@@ -1,10 +1,14 @@
-# The VPC itself — an isolated private network in AWS
-resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr
+# Panggil module VPC — source = path relatif ke folder module
+module "vpc" {
+  source = "./modules/vpc"
 
-  enable_dns_support   = true # VPC can resolve DNS via the AmazonProvidedDNS (.2 address)
-  enable_dns_hostnames = true # instances get public DNS names
-  tags = {
-    Name = "learn-tf-${var.environment}-vpc"
-  }
+  # Input module = argumen fungsi. Nama kiri harus sama dengan variable di module
+  environment = var.environment
+  vpc_cidr    = var.vpc_cidr
 }
+
+# Beritahu Terraform: ini bukan resource baru, hanya pindah alamat di state
+# moved {
+#  from = aws_vpc.main
+#  to   = module.vpc.aws_vpc.main
+#}

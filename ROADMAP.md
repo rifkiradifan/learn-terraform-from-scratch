@@ -4,7 +4,7 @@
 > Get a single VPC running, then turn it into something reusable
 
 - [x] Stage 1 — Initial VPC setup (provider with `default_tags`, variables, outputs, DNS settings)
-- [ ] Stage 2 — Move VPC resource into a reusable module
+- [x] Stage 2 — Move VPC resource into a reusable module (`moved` block for zero-downtime state migration)
 - [ ] Stage 3 — Multi-environment folder structure
 - [ ] Stage 4 — Remote state with S3 backend (native locking via `use_lockfile`, no DynamoDB table)
 

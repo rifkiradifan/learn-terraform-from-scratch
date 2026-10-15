@@ -1,9 +1,9 @@
 output "vpc_id" {
   description = "ID of the VPC"
-  value       = aws_vpc.main.id # <TYPE>.<LOCAL_NAME>.<ATTRIBUTE>
+  value       = module.vpc.vpc_id
 }
 
 output "vpc_cidr_block" {
   description = "CIDR block of the VPC"
-  value       = aws_vpc.main.cidr_block
+  value       = module.vpc.vpc_cidr_block
 }
