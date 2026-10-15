@@ -35,22 +35,28 @@ Documents a step-by-step path through Terraform on AWS — starting with a singl
 
 ## Folder Structure
 
-The VPC lives in a reusable module (Stage 2); the root module only calls it. The multi-environment layout comes in Stage 3.
+One reusable module (`modules/vpc`), and one folder per environment. Each environment folder is its own root module with its own state, so an `apply` in `dev` can never touch `prod`.
 
 ```
 learn-terraform-from-scratch/
-├── versions.tf          # Terraform CLI & provider version constraints
-├── providers.tf         # AWS provider config (region, default_tags)
-├── main.tf              # calls module "vpc"
-├── variables.tf         # inputs: region, environment, VPC CIDR
-├── outputs.tf           # outputs re-exported from the module
 ├── modules/
 │   └── vpc/
-│       ├── main.tf      # aws_vpc resource
-│       ├── variables.tf # module inputs (no defaults)
-│       └── outputs.tf   # vpc_id, vpc_cidr_block
-└── .terraform.lock.hcl  # pinned provider versions & checksums (committed)
+│       ├── main.tf           # aws_vpc resource
+│       ├── variables.tf      # module inputs (no defaults)
+│       └── outputs.tf        # vpc_id, vpc_cidr_block
+└── environments/
+    ├── dev/
+    │   ├── versions.tf       # Terraform CLI & provider version constraints
+    │   ├── providers.tf      # AWS provider config (region, default_tags)
+    │   ├── main.tf           # calls ../../modules/vpc
+    │   ├── variables.tf      # inputs (no default for environment / vpc_cidr)
+    │   ├── terraform.tfvars  # dev values (non-secret, committed)
+    │   ├── outputs.tf
+    │   └── .terraform.lock.hcl
+    └── prod/                 # same layout, different values (10.1.0.0/16)
 ```
+
+`environment` and `vpc_cidr` deliberately have **no default** — a forgotten value fails loudly instead of silently deploying with another environment's value. `terraform.tfvars` is allow-listed in `.gitignore`; any other `*.tfvars` (e.g. a future `secrets.auto.tfvars`) stays ignored.
 
 ---
 
@@ -61,10 +67,11 @@ learn-terraform-from-scratch/
 - Terraform `~> 1.16.0` (64-bit build — `terraform version` should show `windows_amd64` / `linux_amd64`)
 - AWS CLI configured with credentials (`aws sts get-caller-identity` should succeed)
 
-**Run**
+**Run** (per environment — pick `dev` or `prod`)
 
 ```bash
-terraform init      # download the AWS provider
+cd environments/dev
+terraform init      # download the AWS provider & register the module
 terraform validate  # check syntax
 terraform plan      # preview changes
 terraform apply     # create the VPC
@@ -72,9 +79,9 @@ terraform output    # show VPC ID and CIDR
 terraform destroy   # clean up when done
 ```
 
-Override defaults with `-var`, e.g. `terraform plan -var="environment=prod" -var="vpc_cidr=10.1.0.0/16"`.
+Values come from `terraform.tfvars` in each folder. Override with `-var`, e.g. `terraform plan -var="vpc_cidr=10.2.0.0/16"`.
 
-> State is stored locally (`terraform.tfstate`, git-ignored) until Stage 4 moves it to S3.
+> State is stored locally per environment (`environments/*/terraform.tfstate`, git-ignored) until Stage 4 moves it to S3.
 
 ---
 
